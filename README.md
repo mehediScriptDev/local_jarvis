@@ -100,6 +100,40 @@ python3 jarvis_assistant.py --speak
 python3 jarvis_assistant.py --listen --speak
 ```
 
+When using `--listen`, JARVIS will automatically record your question and transcribe it. You do not need to type anything when voice mode is active.
+
+> Note: Voice transcription requires `ffmpeg` plus the Whisper transcription tool.
+> If these are not installed, hotword and voice capture will not work.
+
+Install dependencies on macOS with:
+
+```bash
+python3 -m pip install openai-whisper
+# Install ffmpeg manually (Homebrew or direct download):
+# brew install ffmpeg
+```
+
+### Run with hotword wake word
+
+For the closest hands-free flow, use hotword mode:
+
+```bash
+python3 jarvis_assistant.py --hotword --listen --speak
+```
+
+JARVIS will listen for `Hey Mehedi` or `Hey Jarvis`, then record your command and answer it.
+
+### Auto-start hotword listener
+
+To have JARVIS start automatically and listen at login:
+
+```bash
+python3 setup_hotword_listener.py
+launchctl load ~/Library/LaunchAgents/com.mehedi.jarvis.hotword.plist
+```
+
+Then you can speak to JARVIS without opening a terminal.
+
 ## Phase 3 — Background daemon
 
 JARVIS can run as a background daemon on your Mac so it's always listening.
@@ -127,6 +161,24 @@ Once the daemon is running, query it from any terminal:
 python3 jarvis_cli.py "What's the weather?"
 python3 jarvis_cli.py --interactive
 ```
+
+### Local Mac control commands
+
+JARVIS can now perform local Mac actions directly when you use the interactive assistant or daemon.
+
+Examples:
+
+```bash
+python3 jarvis_assistant.py --speak
+# then type:
+open app "Visual Studio Code"
+run command ls -la ~/projects
+read file ~/projects/README.md
+write file ~/projects/todo.txt with content Finish JARVIS automation
+delete file ~/projects/old.txt confirm
+```
+
+For the daemon, ask via `jarvis_cli.py` and JARVIS will perform the action and speak the result.
 
 ### Check daemon status
 
