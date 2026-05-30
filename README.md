@@ -49,3 +49,38 @@ launchctl unload ~/Library/LaunchAgents/com.mehedi.jarvis.morningbriefing.plist
 - The dashboard is a plain HTML/CSS/JS file with no React or external build system.
 - It uses free public feeds and local fetch logic.
 - If the NewsAPI key is not available, the script falls back to RSS sources.
+
+## Phase 2 — Local JARVIS Assistant
+
+This project now includes a local assistant for Mehedi using Ollama.
+
+### Requirements
+
+- `ollama` installed and available on `PATH`
+- A local Ollama model downloaded, for example `llama2`
+- macOS `say` command for voice output
+- Optional: `ffmpeg` and `whisper` for local voice transcription
+
+### Run the assistant
+
+```bash
+python3 jarvis_assistant.py
+```
+
+### Run with voice output
+
+```bash
+python3 jarvis_assistant.py --speak
+```
+
+### Run with voice transcription (optional)
+
+```bash
+python3 jarvis_assistant.py --listen --speak
+```
+
+### Notes
+
+- The assistant is local and uses Ollama only.
+- If `ollama` is not installed, the script will print a helpful message.
+- Voice transcription requires `ffmpeg` and the `whisper` CLI.
