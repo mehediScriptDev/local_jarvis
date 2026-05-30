@@ -57,9 +57,30 @@ This project now includes a local assistant for Mehedi using Ollama.
 ### Requirements
 
 - `ollama` installed and available on `PATH`
-- A local Ollama model downloaded, for example `llama2`
+- A local Ollama model downloaded (e.g., `llama2`)
 - macOS `say` command for voice output
 - Optional: `ffmpeg` and `whisper` for local voice transcription
+
+### Download a model first
+
+Before running the assistant, download a model:
+
+```bash
+ollama pull llama2
+```
+
+Or use another fast model suitable for M4 Mac:
+
+```bash
+ollama pull mistral
+ollama pull neural-chat
+```
+
+Check available models:
+
+```bash
+ollama list
+```
 
 ### Run the assistant
 
@@ -79,8 +100,51 @@ python3 jarvis_assistant.py --speak
 python3 jarvis_assistant.py --listen --speak
 ```
 
+## Phase 3 — Background daemon
+
+JARVIS can run as a background daemon on your Mac so it's always listening.
+
+### Setup daemon
+
+First, download an Ollama model:
+
+```bash
+ollama pull llama2
+```
+
+Then set up the daemon:
+
+```bash
+python3 setup_jarvis_daemon.py
+launchctl load ~/Library/LaunchAgents/com.mehedi.jarvis.daemon.plist
+```
+
+### Query JARVIS from anywhere
+
+Once the daemon is running, query it from any terminal:
+
+```bash
+python3 jarvis_cli.py "What's the weather?"
+python3 jarvis_cli.py --interactive
+```
+
+### Check daemon status
+
+View the daemon logs:
+
+```bash
+tail -f ~/Library/Logs/jarvis_daemon.log
+```
+
+Stop the daemon:
+
+```bash
+launchctl unload ~/Library/LaunchAgents/com.mehedi.jarvis.daemon.plist
+```
+
 ### Notes
 
 - The assistant is local and uses Ollama only.
 - If `ollama` is not installed, the script will print a helpful message.
 - Voice transcription requires `ffmpeg` and the `whisper` CLI.
+- The daemon runs with voice output enabled by default.

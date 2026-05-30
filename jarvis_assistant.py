@@ -110,10 +110,12 @@ class JarvisAssistant:
         )
 
     def _ask_ollama(self, prompt):
-        cmd = ['ollama', 'query', self.model, prompt]
+        cmd = f'echo {repr(prompt)} | ollama run {self.model}'
         code, out, err = self._run_command(cmd, capture_output=True, timeout=180)
         if code != 0:
-            raise RuntimeError(err or 'Ollama query failed.')
+            if 'not found' in err.lower() or 'unknown model' in err.lower():
+                raise RuntimeError(f'Model "{self.model}" not found. Download it with: ollama pull {self.model}')
+            raise RuntimeError(err or 'Ollama run failed.')
         return out.strip()
 
     def run(self):
