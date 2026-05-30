@@ -28,6 +28,21 @@ python3 morning_briefing.py
 ```
 
 This generates `morning_briefing.html` and opens it in your default browser.
+ 
+## Optional: Automatic morning launch
+
+You can install a macOS LaunchAgent to open the briefing each morning at 8:00 AM:
+
+```bash
+python3 setup_morning_briefing.py
+launchctl load ~/Library/LaunchAgents/com.mehedi.jarvis.morningbriefing.plist
+```
+
+To stop the daily launch:
+
+```bash
+launchctl unload ~/Library/LaunchAgents/com.mehedi.jarvis.morningbriefing.plist
+```
 
 ## Notes
 

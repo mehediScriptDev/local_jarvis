@@ -317,11 +317,11 @@ def fetch_github_trending():
     try:
         html = fetch_url('https://github.com/trending?since=daily')
         repos = []
-        pattern = re.compile(r'<h2.*?href="(/[^/]+/[^/]+)".*?>(.*?)</h2>', re.S)
+        pattern = re.compile(r'<h2[^>]*>\s*<a[^>]*href="(/[^\"]+)"[^>]*>(.*?)</a>\s*</h2>', re.S)
         titles = pattern.findall(html)
         for href, text in titles[:6]:
             repo = href.strip()
-            label = re.sub('\s+', ' ', re.sub('<.*?>', '', text)).strip()
+            label = unescape(re.sub('\s+', ' ', re.sub('<[^>]+>', '', text))).strip()
             link = 'https://github.com' + repo
             repos.append({'name': label, 'url': link, 'description': ''})
         if repos:
