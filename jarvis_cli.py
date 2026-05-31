@@ -43,7 +43,8 @@ def send_query(query):
     try:
         with open(response_pipe, 'r', encoding='utf-8') as out_pipe:
             response = out_pipe.readline().strip()
-            print(response)
+            if response:
+                print(response)
             return True
     except Exception as exc:
         print(f'ERROR: Failed to read response: {exc}', file=sys.stderr)
@@ -53,16 +54,6 @@ def send_query(query):
             os.remove(response_pipe)
         except Exception:
             pass
-
-    try:
-        with open(PIPE_PATH, 'w', encoding='utf-8') as pipe:
-            pipe.write(query + '\n')
-            pipe.flush()
-        print(f'Query sent to JARVIS: {query}')
-        return True
-    except Exception as exc:
-        print(f'ERROR: Failed to send query: {exc}', file=sys.stderr)
-        return False
 
 
 def build_parser():

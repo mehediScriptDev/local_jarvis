@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import utils.session
 import argparse
 import os
 import re
@@ -46,10 +47,11 @@ class JarvisAssistant:
         if ffmpeg_bin:
             return ffmpeg_bin
 
-        spec = importlib.util.find_spec('imageio_ffmpeg')
-        if spec is not None:
+        try:
             import imageio_ffmpeg
             return imageio_ffmpeg.get_ffmpeg_exe()
+        except ImportError:
+            return None
 
         return None
 
@@ -58,11 +60,13 @@ class JarvisAssistant:
         if whisper_bin:
             return [whisper_bin]
 
-        python3_bin = shutil.which('python3') or shutil.which('python')
+        python3_bin = sys.executable or shutil.which('python3') or shutil.which('python')
         if python3_bin:
-            code, out, err = self._run_command([python3_bin, '-m', 'whisper', '--help'], capture_output=True, timeout=10)
-            if code == 0:
+            try:
+                import whisper
                 return [python3_bin, '-m', 'whisper']
+            except ImportError:
+                pass
 
         return None
 
